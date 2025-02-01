@@ -2,15 +2,17 @@ from aiogram import Dispatcher, types, Bot
 from aiogram import F
 from aiogram.filters.command import Command
 from aiogram.types.callback_query import CallbackQuery
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+import random 
 import config
 import asyncio
+from contextlib import suppress
+from aiogram.exceptions import TelegramBadRequest
 
 dp = Dispatcher()
 
-
-
-@dp.message(Command('start'))
+@dp.message(Command("start"))
 async def start_command(message: types.Message) -> None:
     kb = [
         [types.InlineKeyboardButton(text="каталог", callback_data='kurs_list')],
@@ -21,8 +23,12 @@ async def start_command(message: types.Message) -> None:
         ],
         [types.InlineKeyboardButton(text="о нас", callback_data='about_as')]
     ]
-    keyboard = types.InlineKeyboardMarkup(inline_keyboard=kb)
-    await message.answer(f'Привет {message.from_user.full_name} ты хочешь получить знания по python?', reply_markup=keyboard)
+    keyboard = types.InlineKeyboardMarkup(
+        inline_keyboard=kb, input_field_placeholder="Choose your destiny")
+    if isinstance(message, types.CallbackQuery):
+        await message.message.edit_text("Hello my friend", reply_markup=keyboard)
+    else:
+        await message.answer("Hello my friend", reply_markup=keyboard)
 
 
 @dp.callback_query(F.data == "kurs_list")
