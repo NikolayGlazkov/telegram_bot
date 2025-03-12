@@ -23,4 +23,4 @@ async def send_message_loop():
         await asyncio.sleep(CHECK_INTERVAL)  # Ожидание перед следующей отправкой
 
 if __name__ == "__main__":
-    asyncio.run(send_message_loop())
+    asyncio.run(send_telegram_message("ghbdtn"))
