@@ -111,7 +111,7 @@ async def get_notes_by_user(session, user_id: int, date_add: str = None, text_se
             notes_list  = [note for note in note_list if text_search.lower() in (note['content_text'] or "").lower()]
             
         if content_type:
-            notes_list  = [note for note in note_list if mote['content_type'] == content_type]
+            notes_list  = [note for note in note_list if note['content_type'] == content_type]
             
         return note_list
     
